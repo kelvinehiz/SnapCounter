@@ -1,0 +1,82 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1em;
+    text-align: center;
+}
+
+h1 {
+    margin: 0;
+}
+
+p {
+    margin: 0.5em 0 0;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    margin: 2em 0;
+}
+
+.controls {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1em;
+}
+
+label {
+    font-size: 1.2em;
+}
+
+select, input[type="submit"], button {
+    font-size: 1em;
+    padding: 0.5em;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+input[type="submit"], button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+}
+
+input[type="submit"]:hover, button:hover {
+    background-color: #45a049;
+}
+
+#camera-section {
+    margin-top: 1em;
+}
+
+#video, #canvas {
+    margin-top: 1em;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+footer {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 1em;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+

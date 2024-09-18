@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapCounter - Real-Time Camera</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>SnapCounter</h1>
+        <p>Count shapes with real-time camera or upload an image!</p>
+    </header>
+
+    <main>
+        <section class="controls">
+            <form id="upload-form" action="/" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="shape">Select shape:</label>
+                    <select name="shape" id="shape">
+                        <option value="circle">Circle</option>
+                        <option value="ellipse">Ellipse</option>
+                        <option value="square">Square</option>
+                        <option value="rectangle">Rectangle</option>
+                        <option value="triangle">Triangle</option>
+                    </select>
+                </div>
+
+                <div id="camera-section">
+                    <button type="button" id="start-camera-btn">Start Camera</button>
+                    <button type="button" id="stop-camera-btn" style="display:none;">Stop Camera</button>
+                    <video id="video" width="640" height="480" autoplay style="display:none;"></video>
+                    <button type="button" id="capture-btn" style="display:none;">Capture Image</button>
+                    <canvas id="canvas" style="display:none;"></canvas>
+                </div>
+
+                <br>
+                <input type="file" name="file" id="file-input" style="display:none;">
+                <button type="submit" id="upload-btn">Upload Image</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 SnapCounter. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const startCameraBtn = document.getElementById('start-camera-btn');
+        const stopCameraBtn = document.getElementById('stop-camera-btn');
+        const captureBtn = document.getElementById('capture-btn');
+        const fileInput = document.getElementById('file-input');
+        const uploadForm = document.getElementById('upload-form');
+        let stream;
+
+        // Start the camera
+        startCameraBtn.addEventListener('click', () => {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(mediaStream => {
+                video.style.display = "block";
+                captureBtn.style.display = "block";
+                startCameraBtn.style.display = "none";
+                stopCameraBtn.style.display = "inline-block";
+                video.srcObject = mediaStream;
+                stream = mediaStream;
+            }).catch(error => {
+                console.error("Camera access denied: ", error);
+            });
+        });
+
+        // Stop the camera
+        stopCameraBtn.addEventListener('click', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            video.style.display = "none";
+            captureBtn.style.display = "none";
+            startCameraBtn.style.display = "inline-block";
+            stopCameraBtn.style.display = "none";
+        });
+
+        // Capture the image from the video stream
+        captureBtn.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Convert the canvas to a blob and simulate file upload
+            canvas.toBlob(blob => {
+                const file = new File([blob], 'camera-capture.png', { type: 'image/png' });
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+                uploadForm.submit();
+            });
+        });
+    </script>
+</body>
+</html>
+
